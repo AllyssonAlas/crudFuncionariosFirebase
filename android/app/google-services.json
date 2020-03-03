@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "891674129771",
+    "firebase_url": "https://crud-funcionarios-7b0f8.firebaseio.com",
+    "project_id": "crud-funcionarios-7b0f8",
+    "storage_bucket": "crud-funcionarios-7b0f8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891674129771:android:d4336d8bda8c55f905882e",
+        "android_client_info": {
+          "package_name": "com.crud_funcionarios"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "891674129771-i2h95ti0fpqo9oc8u496f9dl496pusas.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvYv4G8KfHgxJ_93miDZq9SpxxEfHI4Hw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "891674129771-i2h95ti0fpqo9oc8u496f9dl496pusas.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
