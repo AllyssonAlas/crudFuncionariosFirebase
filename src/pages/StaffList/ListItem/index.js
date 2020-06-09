@@ -6,6 +6,8 @@ import Button from '../../../components/Button'
 
 import * as EmployeeActions from '../../../store/modules/employee/actions'
 
+import idFormatter from '../../utils/idFormatter'
+
 import {
 	Container,
 	Header,
@@ -22,7 +24,7 @@ export default function ListItem({employee}) {
 		<Container>
 			<Header>
 				<HeaderSection small>
-					<Text>00{employee.id}</Text>
+					<Text>{idFormatter(employee.id)}</Text>
 				</HeaderSection>
 				<HeaderSection>
 					<Text>{employee.role}</Text>

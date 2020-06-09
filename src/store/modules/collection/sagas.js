@@ -6,6 +6,7 @@ import {
 	takeLeading,
 	takeLatest,
 } from 'redux-saga/effects'
+import Toast from 'react-native-tiny-toast'
 
 import {createNewEmployee} from '../../../services/firestore/createData'
 import {getLastId, getCollection} from '../../../services/firestore/readData'
@@ -33,11 +34,14 @@ function* createEmployeeFromLocalStorage() {
 	const isConnected = yield call(verifyConnection)
 	const allKeys = yield call(getAllKeys)
 	if (isConnected && allKeys.length !== 0) {
+		Toast.show('Cadastrando funcionário armazenado localmente.', {
+			position: Toast.position.TOP,
+		})
 		const firstKey = allKeys.shift()
 		const form = yield call(getRegister, firstKey)
 		yield call(createEmployee, JSON.parse(form))
 		yield call(deleteRegister, firstKey)
-		return call(createEmployeeFromLocalStorage)
+		yield call(createEmployeeFromLocalStorage)
 	}
 }
 

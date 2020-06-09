@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import {Alert} from 'react-native'
 import {useSelector, useDispatch} from 'react-redux'
 import * as Yup from 'yup'
 
@@ -7,6 +8,10 @@ import Header from '../../components/Header'
 import Icon from '../../components/Icon'
 import Divider from '../../components/Divider'
 import Button from '../../components/Button'
+
+import * as EmployeeActions from '../../store/modules/employee/actions'
+
+import idFormatter from '../utils/idFormatter'
 
 import Input from './Input'
 import {
@@ -20,8 +25,6 @@ import {
 	ButtonContainer,
 } from './styles'
 
-import * as EmployeeActions from '../../store/modules/employee/actions'
-
 export default function EmployeeInfo({navigation}) {
 	const employee = useSelector(state => state.employee)
 	const [errors, setErrors] = useState({
@@ -32,7 +35,21 @@ export default function EmployeeInfo({navigation}) {
 	})
 	const dispatch = useDispatch()
 
-	async function handleUpdateInfo(employee) {
+	function handleDelete(id) {
+		Alert.alert(
+			'Tem certeza que deseja apagar o funcionário?',
+			'Não há volta.',
+			[
+				{text: 'Não'},
+				{
+					text: 'Sim',
+					onPress: () => dispatch(EmployeeActions.deleteEmployeeRequest(id)),
+				},
+			],
+		)
+	}
+
+	async function handleUpdateInfo(employeeForm) {
 		try {
 			const schema = Yup.object().shape({
 				birthDate: Yup.string()
@@ -49,7 +66,7 @@ export default function EmployeeInfo({navigation}) {
 					.length(10, 'Digite uma data válida'),
 			})
 
-			await schema.validate(employee, {
+			await schema.validate(employeeForm, {
 				abortEarly: false,
 			})
 
@@ -63,6 +80,12 @@ export default function EmployeeInfo({navigation}) {
 			dispatch(EmployeeActions.updateInfoRequest(employee.id))
 		} catch (err) {
 			if (err instanceof Yup.ValidationError) {
+				Alert.alert(
+					'Há campos não preenchidos corretamente',
+					'Verifique os campos em vermelho.',
+					[{text: 'Ok'}],
+				)
+
 				const errorPaths = {}
 
 				err.inner.forEach(error => {
@@ -89,7 +112,7 @@ export default function EmployeeInfo({navigation}) {
 				rightComponent={
 					<Icon name={'home'} onPress={() => navigation.popToTop()} />
 				}
-				subtitle={`Id: 00${employee.id}`}
+				subtitle={`Id: ${idFormatter(employee.id)}`}
 				title={employee.role}
 			/>
 			<Body>
@@ -170,9 +193,7 @@ export default function EmployeeInfo({navigation}) {
 						title={'Salvar Alterações'}
 					/>
 					<Button
-						onPress={() =>
-							dispatch(EmployeeActions.deleteEmployeeRequest(employee.id))
-						}
+						onPress={() => handleDelete(employee.id)}
 						title={'Apagar Funcionário'}
 						warning
 					/>

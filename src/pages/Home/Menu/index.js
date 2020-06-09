@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {BackHandler} from 'react-native'
+import {BackHandler, Alert} from 'react-native'
 
 import Button from '../../../components/Button'
 
@@ -9,6 +9,13 @@ export default function Menu({navigation}) {
 	function handleRoleSelection(role, section) {
 		navigation.navigate('Register', {role, section})
 		setMenu(true)
+	}
+
+	function handleExit() {
+		Alert.alert('Deseja realmente sair', '', [
+			{text: 'Não'},
+			{text: 'Sim', onPress: () => BackHandler.exitApp()},
+		])
 	}
 
 	if (mainMenu === false) {
@@ -47,7 +54,7 @@ export default function Menu({navigation}) {
 				onPress={() => navigation.navigate('StaffList')}
 				title={'Quadro de Funcionários'}
 			/>
-			<Button onPress={() => BackHandler.exitApp()} title={'Sair'} />
+			<Button onPress={handleExit} title={'Sair'} />
 		</>
 	)
 }

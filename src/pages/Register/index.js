@@ -1,4 +1,5 @@
 import React, {useRef} from 'react'
+import {Alert} from 'react-native'
 import {Form} from '@unform/core'
 import {MaskService} from 'react-native-masked-text'
 import * as Yup from 'yup'
@@ -42,6 +43,12 @@ export default function NewRegister({navigation, route}) {
 			navigation.navigate('RegisterConfirm', {form})
 		} catch (err) {
 			if (err instanceof Yup.ValidationError) {
+				Alert.alert(
+					'Há campos não preenchidos corretamente',
+					'Verifique os campos em vermelho.',
+					[{text: 'Ok'}],
+				)
+
 				const errorMessages = {}
 
 				err.inner.forEach(error => {
@@ -76,6 +83,7 @@ export default function NewRegister({navigation, route}) {
 						label={'Data de Nascimento:'}
 						name={'birthDate'}
 						maxLength={10}
+						placeholder={'DD/MM/AAAAA'}
 					/>
 					<Input
 						keyboardType={'email-address'}
@@ -108,6 +116,7 @@ export default function NewRegister({navigation, route}) {
 							formRef.current.setFieldValue('admissionDate', formatted)
 						}}
 						maxLength={10}
+						placeholder={'DD/MM/AAAAA'}
 					/>
 					<ButtonContainer>
 						<Button
