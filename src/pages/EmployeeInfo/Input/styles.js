@@ -4,22 +4,29 @@ import styled from 'styled-components/native'
 const {height, width} = Dimensions.get('window')
 
 export const Container = styled.View`
-	align-items: center;
-	justify-content: center;
-	width: ${width * 0.47}px;
+	padding-bottom: ${height * 0.03}px;
 `
 
 export const Label = styled.Text`
-	color: ${props =>
-		props.error ? 'rgba(255, 0, 0, 1)' : 'rgba(128, 128, 128, 1)'};
-	font-size: 14px;
+	font-size: 16px;
+	font-weight: bold;
+	margin-bottom: ${width * 0.01}px;
 `
 
 export const TextInput = styled.TextInput`
-	color: ${props =>
-		props.error ? 'rgba(255, 0, 0, 1)' : 'rgba(128, 128, 128, 1)'};
+	background-color: rgba(215, 215, 215, 1);
+	border-color: ${props =>
+		props.error ? 'rgba(255, 0, 0, 1)' : 'rgba(194, 192, 189, 1)'};
+	border-radius: 5px;
+	border-width: 1px;
+	font-size: 16px;
+	font-weight: 400;
+	width: ${width * 0.85}px;
+`
+
+export const ErrorMessage = styled.Text`
+	color: rgba(255, 0, 0, 1);
 	font-size: 14px;
-	height: ${height * 0.07}px;
+	font-weight: bold;
 	text-align: center;
-	width: ${width * 0.4}px;
 `

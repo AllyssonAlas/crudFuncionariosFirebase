@@ -1,6 +1,8 @@
-import React, {useState} from 'react'
+import React, {useRef, useEffect, useState} from 'react'
 import {Alert} from 'react-native'
 import {useSelector, useDispatch} from 'react-redux'
+import {Form} from '@unform/core'
+import {MaskService} from 'react-native-masked-text'
 import * as Yup from 'yup'
 
 import Container from '../../components/Container'
@@ -17,8 +19,6 @@ import Input from './Input'
 import {
 	Body,
 	Title,
-	Subtitle,
-	Section,
 	HourSheetContainer,
 	SmallButton,
 	TextButton,
@@ -26,14 +26,24 @@ import {
 } from './styles'
 
 export default function EmployeeInfo({navigation}) {
+	const formRef = useRef(null)
+
 	const employee = useSelector(state => state.employee)
-	const [errors, setErrors] = useState({
-		birthDate: false,
-		email: false,
-		phone: false,
-		admissionDate: false,
-	})
 	const dispatch = useDispatch()
+
+	const [hoursBoard, setHoursBoard] = useState(employee.hoursBoard)
+
+	useEffect(() => {
+		setTimeout(() => {
+			formRef.current.setData({
+				name: employee.name,
+				birthDate: employee.birthDate,
+				email: employee.email,
+				phone: employee.phone,
+				admissionDate: employee.admissionDate,
+			})
+		}, 0)
+	}, [])
 
 	function handleDelete(id) {
 		Alert.alert(
@@ -49,9 +59,10 @@ export default function EmployeeInfo({navigation}) {
 		)
 	}
 
-	async function handleUpdateInfo(employeeForm) {
+	async function handleUpdateInfo(data) {
 		try {
 			const schema = Yup.object().shape({
+				name: Yup.string().required('Campo obrigatório'),
 				birthDate: Yup.string()
 					.required('Campo obrigatório')
 					.length(10, 'Digite uma data válida'),
@@ -66,18 +77,25 @@ export default function EmployeeInfo({navigation}) {
 					.length(10, 'Digite uma data válida'),
 			})
 
-			await schema.validate(employeeForm, {
+			await schema.validate(data, {
 				abortEarly: false,
 			})
 
-			setErrors({
-				birthDate: false,
-				email: false,
-				phone: false,
-				admissionDate: false,
-			})
+			const newInfo = {...employee, ...data, hoursBoard}
 
-			dispatch(EmployeeActions.updateInfoRequest(employee.id))
+			dispatch(EmployeeActions.updateInfoRequest(employee.id, newInfo))
+
+			Alert.alert('Concluído', 'Informação atualizadas com sucesso.', [
+				{text: 'Ok'},
+				{
+					text: 'Voltar para tela anterior',
+					onPress: () => navigation.goBack(),
+				},
+				{
+					text: 'Voltar para tela inicial',
+					onPress: () => navigation.popToTop(),
+				},
+			])
 		} catch (err) {
 			if (err instanceof Yup.ValidationError) {
 				Alert.alert(
@@ -86,19 +104,13 @@ export default function EmployeeInfo({navigation}) {
 					[{text: 'Ok'}],
 				)
 
-				const errorPaths = {}
+				const errorMessages = {}
 
 				err.inner.forEach(error => {
-					errorPaths[error.path] = true
+					errorMessages[error.path] = error.message
 				})
 
-				setErrors({
-					birthDate: false,
-					email: false,
-					phone: false,
-					admissionDate: false,
-					...errorPaths,
-				})
+				formRef.current.setErrors(errorMessages)
 			}
 		}
 	}
@@ -116,79 +128,69 @@ export default function EmployeeInfo({navigation}) {
 				title={employee.role}
 			/>
 			<Body>
-				<Title>{employee.name}</Title>
+				<Title> Setor {employee.section}</Title>
 				<Divider />
-				<Subtitle>Setor {employee.section}</Subtitle>
-				<Divider />
-				<Subtitle>Contato</Subtitle>
-				<Section>
+				<Form ref={formRef} onSubmit={handleUpdateInfo}>
+					<Input label={'Nome:'} name={'name'} />
 					<Input
-						label={'Telefone'}
-						onChangeText={formatted =>
-							dispatch(EmployeeActions.setInfo('phone', formatted))
-						}
-						options={{maskType: 'BRL', withDDD: true, dddMask: '(99) '}}
-						type={'cel-phone'}
-						value={employee.phone}
-						error={errors.phone}
+						keyboardType={'numeric'}
+						onChangeText={text => {
+							const formatted = MaskService.toMask('datetime', text, {
+								format: 'DD/MM/YYYY',
+							})
+							formRef.current.setFieldValue('birthDate', formatted)
+						}}
+						label={'Data de Nascimento:'}
+						name={'birthDate'}
+						maxLength={10}
+						placeholder={'DD/MM/AAAAA'}
 					/>
 					<Input
+						keyboardType={'email-address'}
 						autoCapitalize={'none'}
-						label={'Email'}
-						onChangeText={formatted =>
-							dispatch(EmployeeActions.setInfo('email', formatted))
-						}
-						value={employee.email}
-						error={errors.email}
-					/>
-				</Section>
-				<Divider />
-				<Section>
-					<Input
-						label={'Data de Nascimento'}
-						onChangeText={formatted =>
-							dispatch(EmployeeActions.setInfo('birthDate', formatted))
-						}
-						options={{format: 'DD/MM/YYYY'}}
-						type={'datetime'}
-						value={employee.birthDate}
-						error={errors.birthDate}
+						label={'Email:'}
+						name={'email'}
 					/>
 					<Input
-						label={'Data de admissão'}
-						onChangeText={formatted =>
-							dispatch(EmployeeActions.setInfo('admissionDate', formatted))
-						}
-						options={{format: 'DD/MM/YYYY'}}
-						type={'datetime'}
-						value={employee.admissionDate}
-						error={errors.admissionDate}
+						keyboardType={'numeric'}
+						label={'Telefone:'}
+						name={'phone'}
+						onChangeText={text => {
+							const formatted = MaskService.toMask('cel-phone', text, {
+								maskType: 'BRL',
+								withDDD: true,
+								dddMask: '(99) ',
+							})
+							formRef.current.setFieldValue('phone', formatted)
+						}}
+						maxLength={15}
 					/>
-				</Section>
-				<Divider />
-				<Subtitle>Quadro de horas</Subtitle>
-				<HourSheetContainer>
-					<SmallButton
-						onPress={() =>
-							dispatch(
-								EmployeeActions.setInfo('hoursBoard', employee.hoursBoard - 1),
-							)
-						}>
-						<TextButton>-</TextButton>
-					</SmallButton>
-					<TextButton button>{employee.hoursBoard}</TextButton>
-					<SmallButton
-						onPress={() =>
-							dispatch(
-								EmployeeActions.setInfo('hoursBoard', employee.hoursBoard + 1),
-							)
-						}>
-						<TextButton>+</TextButton>
-					</SmallButton>
-				</HourSheetContainer>
+					<Input
+						keyboardType={'numeric'}
+						label={'Data de Ingresso:'}
+						name={'admissionDate'}
+						onChangeText={text => {
+							const formatted = MaskService.toMask('datetime', text, {
+								format: 'DD/MM/YYYY',
+							})
+							formRef.current.setFieldValue('admissionDate', formatted)
+						}}
+						maxLength={10}
+						placeholder={'DD/MM/AAAAA'}
+					/>
+					<HourSheetContainer>
+						<SmallButton onPress={() => setHoursBoard(hoursBoard - 1)}>
+							<TextButton>-</TextButton>
+						</SmallButton>
+						<TextButton button>{hoursBoard}</TextButton>
+						<SmallButton onPress={() => setHoursBoard(hoursBoard + 1)}>
+							<TextButton>+</TextButton>
+						</SmallButton>
+					</HourSheetContainer>
+				</Form>
 				<ButtonContainer>
 					<Button
-						onPress={() => handleUpdateInfo(employee)}
+						onPress={() => formRef.current.submitForm()}
 						success
 						title={'Salvar Alterações'}
 					/>
