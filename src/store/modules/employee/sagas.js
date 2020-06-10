@@ -25,8 +25,8 @@ function* selectEmployee({id}) {
 	yield call(RootNavigation.navigate, 'EmployeeInfo')
 }
 
-function* updateEmployeeInfo({id}) {
-	const employee = yield select(state => state.employee)
+function* updateEmployeeInfo({id, newInfo}) {
+	const employee = newInfo
 	yield call(updateEmployee, id, employee)
 	yield put({type: '@employee/UPDATE_INFO_SUCCESS', employee})
 }

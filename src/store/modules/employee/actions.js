@@ -11,17 +11,10 @@ export function selectEmployeeRequest(id) {
 	}
 }
 
-export function setInfo(field, value) {
-	return {
-		type: '@employee/SET_INFO',
-		field,
-		value,
-	}
-}
-
-export function updateInfoRequest(id) {
+export function updateInfoRequest(id, newInfo) {
 	return {
 		type: '@employee/UPDATE_INFO_REQUEST',
 		id,
+		newInfo,
 	}
 }
