@@ -19,7 +19,7 @@ export default function StaffList({navigation}) {
 
 	useEffect(() => {
 		dispatch(CollectionActions.getCollectionRequest())
-	}, [])
+	}, [data])
 
 	return (
 		<Container>

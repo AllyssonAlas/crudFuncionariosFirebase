@@ -29,6 +29,7 @@ function* updateEmployeeInfo({id, newInfo}) {
 	const employee = newInfo
 	yield call(updateEmployee, id, employee)
 	yield put({type: '@employee/UPDATE_INFO_SUCCESS', employee})
+	yield put({type: '@collection/TURN_ON_LOADING', employee})
 }
 
 export default all([
