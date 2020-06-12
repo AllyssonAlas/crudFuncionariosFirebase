@@ -9,13 +9,13 @@ import Container from '../../components/Container'
 import Header from '../../components/Header'
 import Icon from '../../components/Icon'
 import Divider from '../../components/Divider'
+import Input from '../../components/Input'
 import Button from '../../components/Button'
 
 import * as EmployeeActions from '../../store/modules/employee/actions'
 
 import idFormatter from '../utils/idFormatter'
 
-import Input from './Input'
 import {
 	Body,
 	Title,

@@ -7,9 +7,9 @@ import * as Yup from 'yup'
 import Container from '../../components/Container'
 import Header from '../../components/Header'
 import Icon from '../../components/Icon'
+import Input from '../../components/Input'
 import Button from '../../components/Button'
 
-import Input from './Input'
 import {FormContainer, ButtonContainer} from './styles'
 
 export default function NewRegister({navigation, route}) {
@@ -83,7 +83,7 @@ export default function NewRegister({navigation, route}) {
 						label={'Data de Nascimento:'}
 						name={'birthDate'}
 						maxLength={10}
-						placeholder={'DD/MM/AAAAA'}
+						placeholder={'DD/MM/AAAA'}
 					/>
 					<Input
 						keyboardType={'email-address'}
@@ -116,7 +116,7 @@ export default function NewRegister({navigation, route}) {
 							formRef.current.setFieldValue('admissionDate', formatted)
 						}}
 						maxLength={10}
-						placeholder={'DD/MM/AAAAA'}
+						placeholder={'DD/MM/AAAA'}
 					/>
 					<ButtonContainer>
 						<Button
