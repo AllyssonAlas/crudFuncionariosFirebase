@@ -19,13 +19,14 @@ import idFormatter from '../utils/idFormatter'
 import {
 	Body,
 	Title,
+	Label,
 	HourSheetContainer,
 	SmallButton,
 	TextButton,
 	ButtonContainer,
 } from './styles'
 
-export default function EmployeeInfo({navigation}) {
+export default function EmployeeInfo ({navigation}) {
 	const formRef = useRef(null)
 
 	const employee = useSelector(state => state.employee)
@@ -45,7 +46,7 @@ export default function EmployeeInfo({navigation}) {
 		}, 0)
 	}, [])
 
-	function handleDelete(id) {
+	function handleDelete (id) {
 		Alert.alert(
 			'Tem certeza que deseja apagar o funcionário?',
 			'Não há volta.',
@@ -59,7 +60,7 @@ export default function EmployeeInfo({navigation}) {
 		)
 	}
 
-	async function handleUpdateInfo(data) {
+	async function handleUpdateInfo (data) {
 		try {
 			const schema = Yup.object().shape({
 				name: Yup.string().required('Campo obrigatório'),
@@ -178,6 +179,7 @@ export default function EmployeeInfo({navigation}) {
 						maxLength={10}
 						placeholder={'DD/MM/AAAAA'}
 					/>
+					<Label>Quadro de horas</Label>
 					<HourSheetContainer>
 						<SmallButton onPress={() => setHoursBoard(hoursBoard - 1)}>
 							<TextButton>-</TextButton>

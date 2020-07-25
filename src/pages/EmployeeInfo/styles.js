@@ -19,6 +19,11 @@ export const Title = styled.Text`
 	text-align: center;
 `
 
+export const Label = styled(Title)`
+	font-size: 20px;
+	font-weight: normal;
+`
+
 export const Subtitle = styled.Text`
 	color: rgba(128, 128, 128, 1);
 	font-size: 20px;
