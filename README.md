@@ -23,22 +23,22 @@ Um simples CRUD feito com React Native e Firebase.
 
 ### Cadastrando funcionário.
 
-<img alt="Ecoleta" src=".github/cadastrando.gif" width="100%">
+<img alt="Ecoleta" src=".github/cadastrando.gif" width="60%">
 
 <br>
 
 ### Pensado com funcionalidade offline-first.
 
-<img alt="Ecoleta" src=".github/offline-first.gif" width="100%">
+<img alt="Ecoleta" src=".github/offline-first.gif" width="60%">
 
 <br>
 
 ### Editando um funcionário.
 
-<img alt="Ecoleta" src=".github/editando.gif" width="100%">
+<img alt="Ecoleta" src=".github/editando.gif" width="60%">
 
 <br>
 
 ### Apagando um funcionário.
 
-<img alt="Ecoleta" src=".github/apagando.gif" width="100%">
+<img alt="Ecoleta" src=".github/apagando.gif" width="60%">
