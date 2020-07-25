@@ -8,7 +8,7 @@ import Button from '../../components/Button'
 
 import * as CollectionActions from '../../store/modules/collection/actions'
 
-export default function RegisterConfirm({navigation, route}) {
+export default function RegisterConfirm ({navigation, route}) {
 	const {loading} = useSelector(state => state.collection)
 	const {form} = route.params
 	const dispatch = useDispatch()
@@ -24,6 +24,7 @@ export default function RegisterConfirm({navigation, route}) {
 	})
 
 	useEffect(() => {
+		dispatch(CollectionActions.turnOnLoading())
 		dispatch(CollectionActions.createEmployeeRequest(form))
 	}, [])
 
