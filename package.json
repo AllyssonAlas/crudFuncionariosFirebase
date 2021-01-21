@@ -20,7 +20,7 @@
 		"@react-navigation/stack": "5.0.4",
 		"@unform/core": "2.0.0",
 		"@unform/mobile": "2.0.0",
-		"immer": "5.3.6",
+		"immer": "8.0.1",
 		"react": "16.9.0",
 		"react-native": "0.61.2",
 		"react-native-gesture-handler": "1.4.1",
